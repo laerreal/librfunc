@@ -19,6 +19,8 @@ from inspect import (
 )
 
 def ismod(n):
+    if n.startswith("__init__."):
+        return False
     if n.endswith(".py"):
         return True
     if n.endswith(".pyd"): # compiled module
