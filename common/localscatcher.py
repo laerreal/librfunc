@@ -57,5 +57,5 @@ to `self`.
         for k, v in _getframe(1).f_locals.items():
             if k.startswith("_") or v is self:
                 continue
-            print("self.%s = %s" % (k, v))
+            # print("self.%s = %s" % (k, v)) # debug
             setattr(self, k, v)
