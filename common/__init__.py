@@ -1,2 +1,3 @@
-from .. import import_all
-import_all()
+from ..importall import gen_this
+gen_this()
+from .this import *
