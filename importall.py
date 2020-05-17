@@ -33,9 +33,15 @@ def ismod(n):
         return True
     return False
 
-def import_all():
-    frame = stack()[1][0]
+def iter_import_all_code(frame):
     _dir = dirname(getmodule(frame).__file__)
     for n in listdir(_dir):
         if ismod(join(_dir, n)):
-            exec("from ." + splitext(n)[0] + " import *", frame.f_globals)
+            yield "from ." + splitext(n)[0] + " import *"
+
+def gen_import_all_code(frame):
+    return "\n".join(iter_import_all_code(frame))
+
+def import_all():
+    frame = stack()[1][0]
+    exec(gen_import_all_code(frame), frame.f_globals)
