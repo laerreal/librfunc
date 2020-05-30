@@ -74,7 +74,7 @@ def dispatch_loop(entity, c2s, s2c):
     while True:
         name, a, kw = c2s.get()
         if name == "terminate":
-            s2c.put(None)
+            s2c.put((False, None))
             break
         try:
             ret = getattr(entity, name)(*a, **kw)
