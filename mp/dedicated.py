@@ -61,7 +61,11 @@ def gen_frontend(name, c2s, s2c):
 
     def frontend(*a, **kw):
         c2s.put((name, a, kw))
-        return s2c.get()
+        exc, ret = s2c.get()
+        if exc:
+            raise ret
+        else:
+            return ret
 
     return frontend
 
@@ -72,7 +76,12 @@ def dispatch_loop(entity, c2s, s2c):
         if name == "terminate":
             s2c.put(None)
             break
-        s2c.put(getattr(entity, name)(*a, **kw))
+        try:
+            ret = getattr(entity, name)(*a, **kw)
+        except BaseException as e:
+            s2c.put((True, e))
+        else:
+            s2c.put((False, ret))
 
 
 def starter(entity, c2s, s2c):
